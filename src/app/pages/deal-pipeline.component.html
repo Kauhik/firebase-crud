@@ -2,6 +2,46 @@
     <h1>Deal Pipeline</h1>
   </div>
   
+  <div class="range-buttons">
+    <button *ngFor="let range of dateRanges" [class.active]="range === selectedRange" (click)="onRangeChange(range)">
+      {{ range }}
+    </button>
+  </div>
+  
+  <div class="charts-container">
+    <div class="charts">
+      <div class="chart line-chart">
+        <canvas baseChart [data]="lineChartConfig.data" [type]="lineChartConfig.type" [options]="lineChartConfig.options"></canvas>
+      </div>
+      <div class="chart pie-chart">
+        <canvas baseChart [data]="pieChartConfig.data" [type]="pieChartConfig.type" [options]="pieChartConfig.options"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div class="metrics">
+    <div class="metric-box">
+      <div class="metric-label">Total Pipeline Value</div>
+      <div class="metric-value">${{ totalValue | number }}</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-label">Total Deals</div>
+      <div class="metric-value">{{ totalDeals }}</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-label">Average Deal Value</div>
+      <div class="metric-value">${{ avgValue | number }}</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-label">Pipeline Velocity</div>
+      <div class="metric-value">${{ velocity | number }}/day</div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-label">Conversion Rate</div>
+      <div class="metric-value">{{ conversionRate }}%</div>
+    </div>
+  </div>
+  
   <div class="add-deal-form">
     <input [(ngModel)]="newDealTitle" placeholder="Deal title" />
     <input [(ngModel)]="newDealValue" type="number" placeholder="Value ($)" />
