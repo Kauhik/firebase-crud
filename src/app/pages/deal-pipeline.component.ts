@@ -168,27 +168,58 @@ export class DealPipelineComponent implements OnInit {
 
   computeMetrics() {
     const filtered = this.filterByRange(this.deals, this.selectedRange);
-    const stageTotals = this.stages.map(stage => {
-      return filtered.filter(d => d.stage === stage).reduce((sum, d) => sum + d.value, 0);
-    });
-
-    this.pieChartConfig.data.datasets[0].data = stageTotals;
-
+  
+    // Total values
     this.totalValue = filtered.reduce((sum, d) => sum + d.value, 0);
     this.totalDeals = filtered.length;
     this.avgValue = this.totalDeals ? this.totalValue / this.totalDeals : 0;
     this.velocity = Math.round(this.totalValue / 30);
+  
     const closedWon = filtered.filter(d => d.stage === 'Closed Won').length;
     const closed = filtered.filter(d => d.stage === 'Closed Won' || d.stage === 'Closed Lost').length;
     this.conversionRate = closed ? Math.round((closedWon / closed) * 10000) / 100 : 0;
-
+  
+    // Pie chart data (deal value per stage)
+    const stageTotals = this.stages.map(stage => {
+      return filtered.filter(d => d.stage === stage).reduce((sum, d) => sum + d.value, 0);
+    });
+  
+    this.pieChartConfig = {
+      type: 'pie',
+      data: {
+        labels: this.pieChartLabels,
+        datasets: [{ data: [...stageTotals] }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    };
+  
+    // Line chart data (monthly revenue)
     const monthly = this.groupByMonth(filtered.filter(d => d.stage === 'Closed Won'));
-    this.lineChartLabels = Object.keys(monthly);
-    this.lineChartData = Object.values(monthly);
-
-    this.lineChartConfig.data.labels = this.lineChartLabels;
-    this.lineChartConfig.data.datasets[0].data = this.lineChartData;
+    const lineLabels = Object.keys(monthly);
+    const lineValues = Object.values(monthly);
+  
+    this.lineChartConfig = {
+      type: 'line',
+      data: {
+        labels: [...lineLabels],
+        datasets: [{
+          label: 'Revenue',
+          data: [...lineValues],
+          fill: true,
+          borderColor: '#42A5F5',
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    };
   }
+  
 
   onRangeChange(range: string) {
     this.selectedRange = range;
