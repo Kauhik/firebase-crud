@@ -5,7 +5,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  User
+  User,
+  signInWithPopup,
+  GoogleAuthProvider
 } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 
@@ -37,5 +39,10 @@ export class AuthService {
 
   getCurrentUser() {
     return this.auth.currentUser;
+  }
+
+  loginWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(this.auth, provider);
   }
 }

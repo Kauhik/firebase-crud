@@ -10,11 +10,16 @@ import { Router } from '@angular/router';
   imports: [CommonModule, FormsModule],
   template: `
     <h2>Login</h2>
+
     <form (ngSubmit)="onSubmit()">
       <input [(ngModel)]="email" name="email" placeholder="Email" required />
       <input [(ngModel)]="password" name="password" type="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
+
+    <hr>
+
+    <button (click)="loginWithGoogle()">Login with Google</button>
   `,
 })
 export class LoginComponent {
@@ -34,6 +39,14 @@ export class LoginComponent {
       this.router.navigate(['/contacts']);
     }).catch(err => {
       console.error('Login error:', err.message);
+    });
+  }
+
+  loginWithGoogle() {
+    this.auth.loginWithGoogle().then(() => {
+      this.router.navigate(['/contacts']);
+    }).catch(err => {
+      console.error('Google Login error:', err.message);
     });
   }
 }
