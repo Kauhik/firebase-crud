@@ -33,6 +33,10 @@ export class DealPipelineComponent implements OnInit {
   userId = '';
   dropListIds: string[] = [];
 
+  selectedDeal: Deal | null = null;
+  editingTitle: string = '';
+  editingValue: number = 0;
+
   constructor(private dealService: DealService, private auth: AuthService) {}
 
   ngOnInit() {
@@ -81,5 +85,30 @@ export class DealPipelineComponent implements OnInit {
     this.dealService.addDeal(newDeal);
     this.newDealTitle = '';
     this.newDealValue = 0;
+  }
+
+  startEdit(deal: Deal) {
+    this.selectedDeal = deal;
+    this.editingTitle = deal.title;
+    this.editingValue = deal.value;
+  }
+
+  saveEdit() {
+    if (this.selectedDeal?.id) {
+      this.dealService.updateContact(this.selectedDeal.id, {
+        title: this.editingTitle,
+        value: this.editingValue
+      }).then(() => {
+        this.selectedDeal = null;
+      });
+    }
+  }
+
+  deleteDealInline() {
+    if (this.selectedDeal?.id) {
+      this.dealService.deleteDeal(this.selectedDeal.id).then(() => {
+        this.selectedDeal = null;
+      });
+    }
   }
 }

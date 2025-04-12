@@ -16,11 +16,26 @@
         class="deal-list"
         (cdkDropListDropped)="drop($event, stage)"
       >
-        <div class="deal-card" *ngFor="let deal of stageColumns[stage]" cdkDrag>
+        <div
+          class="deal-card"
+          *ngFor="let deal of stageColumns[stage]"
+          cdkDrag
+          (click)="startEdit(deal)"
+        >
           <h4>{{ deal.title }}</h4>
           <p>${{ deal.value }}</p>
         </div>
       </div>
     </div>
+  </div>
+  
+  <!-- Edit popup -->
+  <div class="edit-popup" *ngIf="selectedDeal">
+    <h3>Edit Deal</h3>
+    <input [(ngModel)]="editingTitle" placeholder="Deal Title" />
+    <input [(ngModel)]="editingValue" type="number" placeholder="Value" />
+    <button (click)="saveEdit()">Save</button>
+    <button (click)="deleteDealInline()">Delete</button>
+    <button (click)="selectedDeal = null">Cancel</button>
   </div>
   

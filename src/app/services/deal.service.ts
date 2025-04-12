@@ -37,4 +37,10 @@ export class DealService {
     const dealDoc = doc(this.firestore, `deals/${dealId}`);
     return deleteDoc(dealDoc);
   }
+  
+  updateContact(id: string, contact: Partial<Deal>) {
+    const contactDoc = doc(this.firestore, `deals/${id}`);
+    return updateDoc(contactDoc, contact);
+  }
+  
 }
