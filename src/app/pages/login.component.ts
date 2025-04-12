@@ -1,52 +1,62 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { AuthService } from "../services/auth.service";
+import { Router, RouterModule } from "@angular/router";
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  template: `
-    <h2>Login</h2>
-
-    <form (ngSubmit)="onSubmit()">
-      <input [(ngModel)]="email" name="email" placeholder="Email" required />
-      <input [(ngModel)]="password" name="password" type="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
-
-    <hr />
-
-    <button (click)="loginWithGoogle()">Login with Google</button>
-  `,
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent {
-  email = '';
-  password = '';
+  email = ""
+  password = ""
+  errorMessage = ""
 
-  constructor(private auth: AuthService, private router: Router) {
-    this.auth.user$.subscribe(user => {
-      if (user && this.router.url === '/login') {
-        this.router.navigate(['/pipeline']); // 👈 go to pipeline, not contacts
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+  ) {
+    this.auth.user$.subscribe((user) => {
+      if (user && this.router.url === "/login") {
+        this.router.navigate(["/pipeline"])
       }
-    });
+    })
   }
 
   onSubmit() {
-    this.auth.login(this.email, this.password).then(() => {
-      this.router.navigate(['/pipeline']);
-    }).catch(err => {
-      console.error('Login error:', err.message);
-    });
+    this.errorMessage = ""
+
+    if (!this.email || !this.password) {
+      this.errorMessage = "Please enter both email and password"
+      return
+    }
+
+    this.auth
+      .login(this.email, this.password)
+      .then(() => {
+        this.router.navigate(["/pipeline"])
+      })
+      .catch((err) => {
+        console.error("Login error:", err.message)
+        this.errorMessage = err.message || "Failed to sign in. Please try again."
+      })
   }
 
   loginWithGoogle() {
-    this.auth.loginWithGoogle().then(() => {
-      this.router.navigate(['/pipeline']);
-    }).catch(err => {
-      console.error('Google Login error:', err.message);
-    });
+    this.errorMessage = ""
+
+    this.auth
+      .loginWithGoogle()
+      .then(() => {
+        this.router.navigate(["/pipeline"])
+      })
+      .catch((err) => {
+        console.error("Google Login error:", err.message)
+        this.errorMessage = err.message || "Failed to sign in with Google. Please try again."
+      })
   }
 }

@@ -1,12 +1,19 @@
-<div class="add-deal-form">
+<div class="pipeline-header">
+    <h1>Deal Pipeline</h1>
+  </div>
+  
+  <div class="add-deal-form">
     <input [(ngModel)]="newDealTitle" placeholder="Deal title" />
-    <input [(ngModel)]="newDealValue" type="number" placeholder="Value" />
+    <input [(ngModel)]="newDealValue" type="number" placeholder="Value ($)" />
     <button (click)="addNewDeal()">Add Deal</button>
   </div>
   
   <div class="pipeline-container">
     <div class="stage-column" *ngFor="let stage of stages">
-      <h3>{{ stage }}</h3>
+      <h3>
+        {{ stage }}
+        <span class="stage-count">{{ stageColumns[stage].length }}</span>
+      </h3>
   
       <div
         cdkDropList
@@ -23,19 +30,26 @@
           (click)="startEdit(deal)"
         >
           <h4>{{ deal.title }}</h4>
-          <p>${{ deal.value }}</p>
+          <p>${{ deal.value | number:'1.0-0' }}</p>
+          <div class="deal-meta">
+            <span class="deal-date">{{ deal.createdAt | date:'MMM d' }}</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- Edit popup -->
-  <div class="edit-popup" *ngIf="selectedDeal">
+  <!-- Edit popup with overlay -->
+  <div class="overlay" *ngIf="selectedDeal" (click)="selectedDeal = null"></div>
+  <div class="edit-popup" *ngIf="selectedDeal" (click)="$event.stopPropagation()">
     <h3>Edit Deal</h3>
     <input [(ngModel)]="editingTitle" placeholder="Deal Title" />
     <input [(ngModel)]="editingValue" type="number" placeholder="Value" />
-    <button (click)="saveEdit()">Save</button>
-    <button (click)="deleteDealInline()">Delete</button>
-    <button (click)="selectedDeal = null">Cancel</button>
+    
+    <div class="button-group">
+      <button class="save-btn" (click)="saveEdit()">Save</button>
+      <button class="delete-btn" (click)="deleteDealInline()">Delete</button>
+      <button class="cancel-btn" (click)="selectedDeal = null">Cancel</button>
+    </div>
   </div>
   
