@@ -11,11 +11,11 @@ import { Router } from '@angular/router';
   imports: [RouterOutlet, RouterLink, NgIf, AsyncPipe],
   template: `
     <nav class="navbar">
-      <a routerLink="/pipeline">🏠 Pipeline</a>
+      <a routerLink="/pipeline"> Pipeline</a>
 
       <ng-container *ngIf="!(auth.user$ | async); else loggedIn">
-        <a routerLink="/login">🔐 Login</a>
-        <a routerLink="/register">🆕 Register</a>
+        <a routerLink="/login"> Login</a>
+        <a routerLink="/register">Register</a>
       </ng-container>
 
       <ng-template #loggedIn>
