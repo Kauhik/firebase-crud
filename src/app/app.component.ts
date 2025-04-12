@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ContactListComponent } from './pages/contact-list.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  standalone: true,
+  imports: [ContactListComponent],
+  template: `<app-contact-list></app-contact-list>`,
 })
 export class AppComponent {
   title = 'firebase-crud';
