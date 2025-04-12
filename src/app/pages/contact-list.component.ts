@@ -17,31 +17,35 @@ import { User } from '@angular/fire/auth';
 export class ContactListComponent {
   contact: Contact = { name: '', email: '', phone: '' };
   contacts: Contact[] = [];
-  currentUser: User | null = null; // 👈 Track logged-in user
+  currentUser: User | null = null;
 
   constructor(
     private contactService: ContactService,
     private auth: AuthService,
     private router: Router
   ) {
-    // 🔁 Load contacts
-    this.contactService.getContacts().subscribe((data) => {
-      this.contacts = data;
-    });
-
-    // 👤 Get logged-in user and log it
+    // Get logged-in user
     this.auth.user$.subscribe((user) => {
       this.currentUser = user;
-      console.log('🧠 Logged-in user:', user);
+
+      if (user) {
+        // Load only this user's contacts
+        this.contactService.getContactsByUser(user.uid).subscribe((data) => {
+          this.contacts = data;
+        });
+      }
     });
   }
 
   onSubmit() {
+    if (!this.currentUser) return;
+
     if (this.contact.id) {
       this.contactService.updateContact(this.contact.id, this.contact);
     } else {
-      this.contactService.addContact(this.contact);
+      this.contactService.addContact(this.contact, this.currentUser.uid);
     }
+
     this.contact = { name: '', email: '', phone: '' };
   }
 
