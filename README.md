@@ -1,3 +1,48 @@
+#  Simple CRM - Built with Angular + Firebase
+
+A clean, modern, full-featured CRM (Customer Relationship Management) web app with:
+- Contact & Deal management
+- Drag-and-drop Kanban pipeline
+- Real-time analytics dashboard
+- Firebase Auth & Firestore integration
+- Admin seeding support
+
+> Developed by Kaushik Manian for RVI
+
+---
+
+
+## Tech Stack
+
+###  Frontend
+- **Angular 19** (standalone components)
+- **Angular Router**
+- **Angular CDK** (drag-and-drop)
+- **NgCharts / Chart.js** (dashboard)
+- **SCSS** (modular styles)
+- **RxJS** (reactivity)
+- **FormsModule** (template forms)
+
+###  Backend (BaaS)
+- **Firebase Firestore** — deal & contact storage (per user)
+- **Firebase Auth** — Email/password + Google login
+- **Firebase Hosting** — Fully deployed SPA
+- **Firestore Security Rules** — per-user isolation
+- **Firebase Admin SDK** — seeding dummy data
+
+---
+
+##  Features
+
+-  Auth (email, password & Google)
+-  Contact CRUD (scoped to user)
+-  Deal Pipeline with drag-and-drop stages
+-  Analytics dashboard with metrics & charts
+-  Date range filters (1m, 3m, 6m, 1y)
+-  Responsive UI with beautiful layout
+
+
+
 # FirebaseCrud
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
@@ -57,3 +102,4 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
