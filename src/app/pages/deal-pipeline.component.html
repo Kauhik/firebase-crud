@@ -1,0 +1,26 @@
+<div class="add-deal-form">
+    <input [(ngModel)]="newDealTitle" placeholder="Deal title" />
+    <input [(ngModel)]="newDealValue" type="number" placeholder="Value" />
+    <button (click)="addNewDeal()">Add Deal</button>
+  </div>
+  
+  <div class="pipeline-container">
+    <div class="stage-column" *ngFor="let stage of stages">
+      <h3>{{ stage }}</h3>
+  
+      <div
+        cdkDropList
+        [id]="'stage-' + stage"
+        [cdkDropListData]="stageColumns[stage]"
+        [cdkDropListConnectedTo]="dropListIds"
+        class="deal-list"
+        (cdkDropListDropped)="drop($event, stage)"
+      >
+        <div class="deal-card" *ngFor="let deal of stageColumns[stage]" cdkDrag>
+          <h4>{{ deal.title }}</h4>
+          <p>${{ deal.value }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

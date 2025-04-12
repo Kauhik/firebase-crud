@@ -24,7 +24,7 @@ export class RegisterComponent {
   constructor(private auth: AuthService, private router: Router) {
     this.auth.user$.subscribe(user => {
       if (user) {
-        this.router.navigate(['/contacts']);
+        this.router.navigate(['/pipeline']);
       }
     });
   }

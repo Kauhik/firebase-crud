@@ -1,4 +1,5 @@
 <h1>📇 Contacts</h1>
+<a routerLink="/pipeline" class="btn btn-primary">Go to Pipeline</a>
 <p *ngIf="currentUser">Welcome, {{ currentUser.email }}</p>
 <button (click)="logout()">Logout</button>
 <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
