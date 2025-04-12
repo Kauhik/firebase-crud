@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,15 +12,19 @@ import { AuthService } from './services/auth.service';
   template: `
     <nav class="navbar">
       <a routerLink="/pipeline">🏠 Pipeline</a>
-      <a routerLink="/login">🔐 Login</a>
-      <a routerLink="/register">🆕 Register</a>
 
-      <span class="spacer"></span>
+      <ng-container *ngIf="!(auth.user$ | async); else loggedIn">
+        <a routerLink="/login">🔐 Login</a>
+        <a routerLink="/register">🆕 Register</a>
+      </ng-container>
 
-      <span *ngIf="(auth.user$ | async) as user">
-        👋 {{ user.displayName || user.email }}
-        <button (click)="logout()">Logout</button>
-      </span>
+      <ng-template #loggedIn>
+        <span class="spacer"></span>
+        <span class="user">
+          👋 {{ (auth.user$ | async)?.displayName || (auth.user$ | async)?.email }}
+          <button (click)="logout()">Logout</button>
+        </span>
+      </ng-template>
     </nav>
 
     <router-outlet></router-outlet>
@@ -51,9 +56,11 @@ import { AuthService } from './services/auth.service';
   `]
 })
 export class AppComponent {
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, private router: Router) {}
 
   logout() {
-    this.auth.logout();
+    this.auth.logout().then(() => {
+      this.router.navigate(['/login']); 
+    });
   }
 }

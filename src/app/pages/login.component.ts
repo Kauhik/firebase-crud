@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
       <button type="submit">Login</button>
     </form>
 
-    <hr>
+    <hr />
 
     <button (click)="loginWithGoogle()">Login with Google</button>
   `,
@@ -28,15 +28,15 @@ export class LoginComponent {
 
   constructor(private auth: AuthService, private router: Router) {
     this.auth.user$.subscribe(user => {
-      if (user) {
-        this.router.navigate(['/pipeline']);
+      if (user && this.router.url === '/login') {
+        this.router.navigate(['/pipeline']); // 👈 go to pipeline, not contacts
       }
     });
   }
 
   onSubmit() {
     this.auth.login(this.email, this.password).then(() => {
-      this.router.navigate(['/contacts']);
+      this.router.navigate(['/pipeline']);
     }).catch(err => {
       console.error('Login error:', err.message);
     });
@@ -44,7 +44,7 @@ export class LoginComponent {
 
   loginWithGoogle() {
     this.auth.loginWithGoogle().then(() => {
-      this.router.navigate(['/contacts']);
+      this.router.navigate(['/pipeline']);
     }).catch(err => {
       console.error('Google Login error:', err.message);
     });

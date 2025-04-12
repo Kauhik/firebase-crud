@@ -23,15 +23,15 @@ export class RegisterComponent {
 
   constructor(private auth: AuthService, private router: Router) {
     this.auth.user$.subscribe(user => {
-      if (user) {
-        this.router.navigate(['/pipeline']);
+      if (user && this.router.url === '/register') {
+        this.router.navigate(['/pipeline']); // ✅ redirect to pipeline
       }
     });
   }
 
   onSubmit() {
     this.auth.register(this.email, this.password).then(() => {
-      this.router.navigate(['/contacts']);
+      this.router.navigate(['/pipeline']);
     }).catch(err => {
       console.error('Registration error:', err.message);
     });
